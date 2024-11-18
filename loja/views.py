@@ -3,7 +3,7 @@ from .models import Product, Category
 
 def category_detail(request, slug):
     category = get_object_or_404(Category, slug=slug)
-    products = Category.products.all()
+    products = category.products.all()
     return render(request, 'loja/category_detalhes.html', {'category': category, 'products': products})
 
 def Product_detail(request, category_slug, slug):
