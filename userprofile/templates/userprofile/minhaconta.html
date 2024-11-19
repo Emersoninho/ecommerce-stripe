@@ -1,0 +1,9 @@
+{% extends 'ecommerce/base.html' %}
+
+{% block title %}Minha Conta{% endblock title %}
+
+{% block content %}
+    <h1 class="text-2xl">Página da minha conta ou do meu cadastro</h1>
+    <a href="{% url 'logout' %}" class="py-4 px-8 bg-red-400 text-white">Sair</a>
+{% endblock content %}
+

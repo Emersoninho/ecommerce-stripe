@@ -1,0 +1,16 @@
+{% extends "ecommerce/base.html" %}
+
+{% block title %}
+    Cadastrar usuários
+{% endblock title %}
+
+{% block content %}
+    <h1 class="text-2xl">Página de cadastro</h1>
+    <form method="POST" action=".">{% csrf_token %}
+        {{ form.as_p }}
+        <button class="py-4 px-8 bg-green-500">Cadastrar</button>
+    </form>
+{% endblock content %}
+
+
+

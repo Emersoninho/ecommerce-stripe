@@ -27,6 +27,9 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+# LOGIN_REDIRECT_URL = 'minhaconta'
+
+# LOGOUT_REDIRECT_URL = 'frontpage'
 
 # Application definition
 
