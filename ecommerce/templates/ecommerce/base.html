@@ -7,7 +7,7 @@
   <title>{% block title %}{% endblock title %} - 5.1</title>
 </head>
 <body>
-    <nav class="max-w-4xl mx-auto py-4 px-5 flex items-center justify-between bg-black mt-1">
+    <nav class="max-w-6xl mx-auto py-4 px-5 flex items-center justify-between bg-black mt-1">
         <div class="logo">
             <a href="/" class="text-2xl text-white">Loja_Django</a>
         </div>
@@ -18,7 +18,8 @@
         <div class="menu flex space-x-4">
             {% menu %}
             {% if request.user.is_authenticated %}
-            <a href="{% url 'minhaconta' %}" class="text-2xl text-white">Meu Cadastro</a>
+                <a href="{% url 'minhaconta' %}" class="text-2xl text-white">Meu Cadastro</a>
+                <a href="{% url 'loja' %}" class="text-2xl text-white">Minha Loja</a>
             {% endif %}
         </div>
     </nav>
