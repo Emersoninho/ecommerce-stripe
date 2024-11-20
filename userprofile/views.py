@@ -11,6 +11,9 @@ def vendor_details(request, pk):
 def minha_conta(request):
     return render(request, 'userprofile/minhaconta.html')
 
+# def logout(request):
+#     return render(request, 'userprofile/logout.html')    
+
 def cadastrar(request):
     if request.method == 'POST':
         form = UserCreationForm(request.POST)
