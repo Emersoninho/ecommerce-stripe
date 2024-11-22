@@ -27,6 +27,10 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+CARRINHO_COOKIE_AGE = 86400
+
+CARRINHO_SESSION_ID = 'carrinho'
+
 LOGIN_REDIRECT_URL = 'minhaconta'
 
 LOGOUT_REDIRECT_URL = 'frontpage'

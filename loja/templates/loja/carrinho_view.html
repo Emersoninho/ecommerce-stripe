@@ -1,0 +1,15 @@
+{% extends 'ecommerce/base.html' %}
+
+{% block title %}Carrinho{% endblock title %}
+
+{% block content %}
+    <h1 class="text-2xl">Nosso Carrinho</h1>
+    {% for item in carrinho %}
+        <p><b>Titulo: </b>{{item.product.title}}</p>
+        <br>
+        <p><b>Quantidade:</b>{{item.quantity}}</p>
+        <br>
+    {% endfor %}
+    <strong>Total Valor: </strong>{{carrinho.get_total_custo}}
+{% endblock content %}
+

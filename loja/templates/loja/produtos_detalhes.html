@@ -16,7 +16,8 @@
         <a href="{% url "vendor_details" product.user.id %}">{% firstof product.user.get_full_name product.user.username %}</a>
     </p>
     {% if product.description %}
-        <p class="mt-4">{{product.description}}</p>
+    <br>
+    <a href="{% url 'add_to_carrinho' product.id %}" class="inline-block px-8 py-4 bg-green-600 text-white">Adicionar para o Carrinho</a>
     {% endif %}
 {% endblock content %}
 

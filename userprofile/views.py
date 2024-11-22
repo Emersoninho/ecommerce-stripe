@@ -12,11 +12,13 @@ from django.contrib import messages
 
 def vendor_details(request, pk):
     user = User.objects.get(pk=pk)
-    return render(request, 'userprofile/vendor_details.html', {'user': user})
+    products = user.products.filter(status=Product.ATIVAR)
+    return render(request, 'userprofile/vendor_details.html', {'user': user, 'products': products})
 
 @login_required
 def minha_loja(request):
-    return render(request, 'userprofile/minhaloja.html')
+    products = request.user.products.exclude(status=Product.DELETADO)
+    return render(request, 'userprofile/minhaloja.html', {'products': products})
 
 @login_required
 def add_product(request):
@@ -34,7 +36,7 @@ def add_product(request):
             return redirect('loja')
     else:
         form = ProductForm()
-    return render(request, 'userprofile/add_product.html', {'title': 'Adicionar Produto', 'form': form})
+    return render(request, 'userprofile/product_form.html', {'title': 'Adicionar Produto', 'form': form})
 
 @login_required
 def edit_product(request, pk):
@@ -49,8 +51,22 @@ def edit_product(request, pk):
             return redirect('loja')
     else:    
         form = ProductForm(instance=product)
-    return render(request, 'userprofile/add_product.html', {'title':'Editar Produto', 'form': form})    
+    return render(request, 'userprofile/product_form.html',
+                  {'title': 'Editar Produto',
+                   'product': product,
+                   'form': form
+                   }) 
 
+@login_required
+def delete_product(request, pk):
+    product = Product.objects.filter(user=request.user).get(pk=pk)
+    product.status = Product.DELETADO
+    product.save()
+    
+    messages.success(request, 'ESTE PRODUTO FOI DELETADO COM SUCESSO!')
+
+    return redirect('loja')
+    
 @login_required
 def minha_conta(request):
     return render(request, 'userprofile/minhaconta.html')

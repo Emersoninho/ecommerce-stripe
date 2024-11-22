@@ -9,7 +9,7 @@ urlpatterns = [
     path('minhaconta/', views.minha_conta, name='minhaconta'),
     path('loja/', views.minha_loja, name='loja'),
     path('loja/add-product/', views.add_product, name='add_product'),
-    path('loja/edit-product/<int:pk>/', views.edit_product, name='edit-product'),
+    path('loja/edit-product/<int:pk>/', views.edit_product, name='edit_product'),
+    path('loja/delete-product/<int:pk>/', views.delete_product, name='delete_product'),
     path('vendors/<int:pk>/', views.vendor_details, name='vendor_details'),
-  
 ]
