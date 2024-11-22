@@ -7,6 +7,8 @@ from django.contrib.auth.decorators import login_required
 from loja.forms import ProductForm
 from loja.models import Product, Category
 from django.utils.text import slugify
+from loja.models import Product
+from django.contrib import messages
 
 def vendor_details(request, pk):
     user = User.objects.get(pk=pk)
@@ -27,13 +29,27 @@ def add_product(request):
             product.slug = slugify(title)
             product.save()
 
+            messages.success(request, 'ESTE PRODUTO FOI CADASTRADO COM SUCESSO!')
+
             return redirect('loja')
     else:
         form = ProductForm()
-        return render(request, 'userprofile/add_product.html', {'form': form})
+    return render(request, 'userprofile/add_product.html', {'title': 'Adicionar Produto', 'form': form})
 
-    form = ProductForm()
-    return render(request, 'userprofile/add_product.html', {'form': form})
+@login_required
+def edit_product(request, pk):
+    product = Product.objects.filter(user=request.user).get(pk=pk)
+    if request.method == 'POST':
+        form = ProductForm(request.POST, request.FILES, instance=product)
+        if form.is_valid():
+            form.save()
+
+            messages.success(request, 'ESTE PRODUTO FOI EDITADO COM SUCESSO!')
+
+            return redirect('loja')
+    else:    
+        form = ProductForm(instance=product)
+    return render(request, 'userprofile/add_product.html', {'title':'Editar Produto', 'form': form})    
 
 @login_required
 def minha_conta(request):

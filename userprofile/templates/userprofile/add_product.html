@@ -1,12 +1,20 @@
 {% extends 'ecommerce/base.html' %}
 
-{% block title %}Adicionar Produtos{% endblock title %}
+{% block title %}
+    {{title}}
+{% endblock title %}
 
 {% block content %}
-    <h1 class="text-2xl">Adicionar Produtos</h1>
+    <h1 class="text-2xl">{{title}}</h1>
     <form method="POST" action="." enctype="multipart/form-data">{% csrf_token %}
         {{ form.as_p }}
-        <button class="py-4 px-8 bg-green-500 text-white hover:bg-green-800">Cadastrar</button>
+        <br>
+        <hr>
+        <br>
+        <button class="py-4 px-8 bg-green-500 text-white hover:bg-green-800">Cadastrar / Editar Produtos</button>
     </form>
+    {% if title == 'Editar Produto' %}
+        <a href="#" class="mt-3 inline-block py-4 px-8 bg-red-500 text-white hover:bg-red-800">Deletar Produtos</a>
+    {% endif %}
 {% endblock content %}
 
