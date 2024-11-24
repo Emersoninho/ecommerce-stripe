@@ -74,4 +74,25 @@ class Product(models.Model):
         name = image.name.replace('uploads/produto_images/', '')
         thumbnail = File(thumb_io, name=name)
 
-        return thumbnail
+        return 
+    
+class Order(models.Model):
+    p_name = models.CharField(max_length=255)
+    s_name = models.CharField(max_length=255)
+    address = models.CharField(max_length=255)
+    zip_numero = models.CharField(max_length=255)
+    city = models.CharField(max_length=255)
+    valor_pago = models.IntegerField(blank=True, null=True)
+    esta_pago = models.BooleanField(default=False)
+    merc_id = models.CharField(max_length=255)
+    criado_por = models.ForeignKey(User, related_name='orders', on_delete=models.SET_NULL, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)    
+
+class OrderItem(models.Model):
+    order = models.ForeignKey(Order, related_name='items', on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, related_name='items', on_delete=models.CASCADE)
+    price = models.IntegerField()
+    quantity = models.IntegerField(default=1)
+
+    def get_total_price(self):
+        return self.price / 100

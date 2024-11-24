@@ -37,7 +37,11 @@ class Carrinho(object):
             if self.carrinho[product_id]['quantity'] == 0:
                 self.remove(product_id)
 
-        self.save()        
+        self.save()     
+
+    def clear(self):
+        del self.session[settings.CARRINHO_SESSION_ID]
+        self.session.modified = True       
 
     def remove(self, product_id):
         if product_id in self.carrinho:
@@ -48,5 +52,5 @@ class Carrinho(object):
         for p in self.carrinho.keys():
             self.carrinho[str(p)]['product'] = Product.objects.get(pk=p)
             
-            return int(sum(item['product'].price * item['quantity'] for item in self.carrinho.values())) / 100
+        return int(sum(item['product'].price * item['quantity'] for item in self.carrinho.values())) / 100
             

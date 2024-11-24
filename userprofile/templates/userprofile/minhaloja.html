@@ -3,7 +3,7 @@
 {% block title %}Minha Loja{% endblock title %}
 
 {% block content %}
-    <h1 class="text-2xl">Minha Loja</h1>
+    <h1 class="text-2xl mt-2">Minha Loja</h1>
     {% if messages %}
         {% for message in messages %}
             <div class="px-8 py-4 bg-green-500 text-2xl text-white">
@@ -11,7 +11,40 @@
             </div>
         {% endfor %}
     {% endif %}
-    <a href="{% url 'add_product' %}" class="mt-6 inline-block py-4 px-8 bg-green-500 text-white">Adicionar Produtos</a>
+    <hr>
+    <h1 class="text-2xl mt-2">Meus Pedidos</h1>
+    <div class="flex flex-wrap mt-2">
+        <div class="w-1/4">
+            <strong>Produto_ID</strong>
+        </div>
+        <div class="w-1/4">
+            <strong>Título Produto</strong>
+        </div>
+        <div class="w-1/4">
+            <strong>Quantidade Produto</strong>
+        </div>
+        <div class="w-1/4">
+            <strong>Preco Produto</strong>
+        </div>
+    </div>
+    {% for order_item in order_items %}
+        <div class="flex flex-wrap mt-2">
+            <div class="w-1/4">
+                <p class="font-extrabold">{{order_item.id}}</p>
+            </div>
+            <div class="w-1/4">
+                <p class="font-extrabold">{{order_item.product.title}}</p>
+            </div>
+            <div class="w-1/4">
+                <p class="font-extrabold">{{order_item.quantity}}</p>
+            </div>
+            <div class="w-1/4">
+                <p class="font-extrabold">{{order_item.get_total_price}}</p>
+            </div>
+        </div>
+    {% endfor %}
+    <hr>
+    <a href="{% url 'add_product' %}" class="mt-6 inline-block py-4 px-8 bg-green-500 text-white arounded-xl text-2xl">Adicionar Produtos</a>
     <h2 class="mt-6 text-xl">Meus Produtos</h2>
 
     {% if products %}

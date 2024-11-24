@@ -5,7 +5,7 @@ from django.contrib.auth import login
 from .models import UserFrofile
 from django.contrib.auth.decorators import login_required
 from loja.forms import ProductForm
-from loja.models import Product, Category
+from loja.models import Product, Order, OrderItem
 from django.utils.text import slugify
 from loja.models import Product
 from django.contrib import messages
@@ -13,12 +13,15 @@ from django.contrib import messages
 def vendor_details(request, pk):
     user = User.objects.get(pk=pk)
     products = user.products.filter(status=Product.ATIVAR)
+
     return render(request, 'userprofile/vendor_details.html', {'user': user, 'products': products})
 
 @login_required
 def minha_loja(request):
     products = request.user.products.exclude(status=Product.DELETADO)
-    return render(request, 'userprofile/minhaloja.html', {'products': products})
+    order_items = OrderItem.objects.filter(product__user=request.user)
+    
+    return render(request, 'userprofile/minhaloja.html', {'products': products, 'order_items': order_items})
 
 @login_required
 def add_product(request):

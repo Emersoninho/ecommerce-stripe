@@ -1,8 +1,9 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from .models import Product, Category
+from .models import Product, Category, Order, OrderItem
 from django.db.models import Q
 from .carrinho import Carrinho
 from django.contrib.auth.decorators import login_required
+from .forms import OrderForm
 
 def add_to_carrinho(request, product_id):
     carrinho = Carrinho(request)
@@ -35,8 +36,35 @@ def carrinho_view(request):
 @login_required
 def checar_comprar(request):
     carrinho = Carrinho(request)
+    if request.method == 'POST':
+        form = OrderForm(request.POST)
+        if form.is_valid():
 
-    return render(request, 'loja/checar_comprar.html', {'carrinho': carrinho})
+            total_price = 0
+            for item in carrinho:
+                product = item['product']
+                total_price += product.price * int(item['quantity'])
+
+            order = form.save(commit=False)
+            order.criado_por = request.user
+            order.valor_pago = total_price
+            order.save()
+
+            for item in carrinho:
+                product = item['product']
+                quantity = int(item['quantity'])
+                price = product.price * quantity
+
+                item = OrderItem.objects.create(order=order, product=product, price=price, quantity=quantity)
+
+            carrinho.clear()
+
+            return redirect('minhaconta')
+            
+    else:
+        form = OrderForm()
+
+    return render(request, 'loja/checar_comprar.html', {'carrinho': carrinho, 'form': form})
 
 def search(request):
     query = request.GET.get('query', '')

@@ -21,9 +21,12 @@
         </form>
         <div class="menu flex items-center space-x-10">
             {% menu %}
+            <a href="{% url 'carrinho_view' %}" class="py-2 px-3 bg-orange-400 rounded-xl hover:bg-orange-800 text-1xl text-blue-100">Meu Carrinho = {{carrinho|length}}</a>
             {% if request.user.is_authenticated %}
-                <a href="{% url 'minhaconta' %}" class="py-2 px-3 bg-orange-400 rounded-xl hover:bg-orange-800 text-2xl text-white">Meu Cadastro</a>
-                <a href="{% url 'loja' %}" class="py-2 px-3 bg-orange-400 rounded-xl hover:bg-orange-800  text-2xl text-white">Minha Loja</a>
+                <a href="{% url 'minhaconta' %}" class="py-2 px-3 bg-orange-400 rounded-xl hover:bg-orange-800 text-1xl text-blue-100">Meu Cadastro</a>
+                {% if request.user.userprofile.is_vendor %}
+                    <a href="{% url 'loja' %}" class="py-2 px-3 bg-orange-400 rounded-xl hover:bg-orange-800  text-1xl text-blue-100">Minha Loja</a>
+                {% endif %}
             {% endif %}
         </div>
     </nav>

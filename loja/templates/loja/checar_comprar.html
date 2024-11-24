@@ -4,6 +4,10 @@
 
 {% block content %}
     <h1 class="mb-6 text-2xl">Valor a Pagar</h1>
-    <h1 class="text-xl text-green-800">Total a Pagar : R$ {{carrinho.get_total_custo}}</h1>
+    <h2 class="text-xl text-green-800">Total a Pagar :R$ {{carrinho.get_total_custo}}</h2>
+    <form method="POST" action=".">{% csrf_token %}
+        {{form.as_p}}
+        <button class="inline-block px-8 py-4 bg-green-800 text-white rounded-xl mt-2 text-2xl">Completar Compra</button>
+    </form>
 {% endblock content %}
 
