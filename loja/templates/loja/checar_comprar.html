@@ -1,0 +1,9 @@
+{% extends 'ecommerce/base.html' %}
+
+{% block title %}Comprar{% endblock title %}
+
+{% block content %}
+    <h1 class="mb-6 text-2xl">Valor a Pagar</h1>
+    <h1 class="text-xl text-green-800">Total a Pagar : R$ {{carrinho.get_total_custo}}</h1>
+{% endblock content %}
+

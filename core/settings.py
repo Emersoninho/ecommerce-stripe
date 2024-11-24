@@ -29,6 +29,8 @@ ALLOWED_HOSTS = []
 
 CARRINHO_COOKIE_AGE = 86400
 
+LOGIN_URL = 'login'
+
 CARRINHO_SESSION_ID = 'carrinho'
 
 LOGIN_REDIRECT_URL = 'minhaconta'
@@ -125,7 +127,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'

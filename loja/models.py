@@ -1,5 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.core.files import File
+from io import BytesIO
+from PIL import Image
 
 class Category(models.Model):
     title = models.CharField(max_length=50)
@@ -34,6 +37,7 @@ class Product(models.Model):
     description = models.TextField(blank=True)
     price = models.IntegerField()
     image = models.ImageField(upload_to='uploads/produto_images/', blank=True, null=True)
+    thumbnail = models.ImageField(upload_to='uploads/produto_images/thumb_image/', blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     status = models.CharField(max_length=50, choices=STATUS_ESCOLHAS, default=ATIVAR)
@@ -48,3 +52,26 @@ class Product(models.Model):
     
     def get_display_price(self):
         return self.price / 100
+    
+    def get_thumbnail(self):
+        if self.thumbnail:
+            return self.thumbnail.url
+        
+        elif self.image:
+            self.thumbnail = self.fazer_thumbnail(self.image)
+            self.save()
+            return self.thumbnail.url
+        else:
+            return 'https://via.placeholder.com/240x240.jpg'
+    
+    def fazer_thumbnail(self, image, size=(300, 300)):
+        img = Image.open(image)
+        img.convert('RGB')
+        img.thumbnail(size)
+
+        thumb_io = BytesIO()
+        img.save(thumb_io, 'JPEG', quality=85)
+        name = image.name.replace('uploads/produto_images/', '')
+        thumbnail = File(thumb_io, name=name)
+
+        return thumbnail

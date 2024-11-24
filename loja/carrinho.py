@@ -32,12 +32,21 @@ class Carrinho(object):
             self.carrinho[product_id] = {'quantity': int(quantity), 'id': product_id}
 
         if update_quantity:
-            self.carrinho[product_id] += int(quantity)
+            self.carrinho[product_id]['quantity'] += int(quantity)
+            
+            if self.carrinho[product_id]['quantity'] == 0:
+                self.remove(product_id)
+
         self.save()        
+
+    def remove(self, product_id):
+        if product_id in self.carrinho:
+            del self.carrinho[product_id]
+            self.save()
 
     def get_total_custo(self):
         for p in self.carrinho.keys():
             self.carrinho[str(p)]['product'] = Product.objects.get(pk=p)
             
             return int(sum(item['product'].price * item['quantity'] for item in self.carrinho.values())) / 100
-        
+            

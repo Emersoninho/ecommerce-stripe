@@ -2,17 +2,41 @@ from django.shortcuts import render, get_object_or_404, redirect
 from .models import Product, Category
 from django.db.models import Q
 from .carrinho import Carrinho
+from django.contrib.auth.decorators import login_required
 
 def add_to_carrinho(request, product_id):
     carrinho = Carrinho(request)
     carrinho.add(product_id)
 
-    return redirect('frontpage')
+    return redirect('carrinho_view')
+
+def trocar_quantidade(request, product_id):
+    action = request.GET.get('action', '')
+    if action:
+        quantity = 1
+        if action == 'decrease':
+            quantity = -1
+        carrinho = Carrinho(request)
+        carrinho.add(product_id, quantity, True)
+
+    return redirect('carrinho_view')       
+
+def remove_from_carrinho(request, product_id):
+    carrinho = Carrinho(request)
+    carrinho.remove(product_id)
+
+    return redirect('carrinho_view')
 
 def carrinho_view(request):
     carrinho = Carrinho(request)
 
     return render(request, 'loja/carrinho_view.html', {'carrinho': carrinho})
+
+@login_required
+def checar_comprar(request):
+    carrinho = Carrinho(request)
+
+    return render(request, 'loja/checar_comprar.html', {'carrinho': carrinho})
 
 def search(request):
     query = request.GET.get('query', '')
