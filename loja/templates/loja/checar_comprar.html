@@ -5,9 +5,56 @@
 {% block content %}
     <h1 class="mb-6 text-2xl">Valor a Pagar</h1>
     <h2 class="text-xl text-green-800">Total a Pagar :R$ {{carrinho.get_total_custo}}</h2>
-    <form method="POST" action=".">{% csrf_token %}
         {{form.as_p}}
-        <button class="inline-block px-8 py-4 bg-green-800 text-white rounded-xl mt-2 text-2xl">Completar Compra</button>
-    </form>
+        <button class="inline-block px-8 py-4 bg-green-800 text-white rounded-xl mt-2 text-2xl" onclick="comprar(event)">Completar Compra</button>
 {% endblock content %}
+
+{% block scripts %}
+    <script type="aplication/javascript" src="https://js.stripe.com/v3/"></script>
+    <script>
+        function comprar(event) {
+            event.preventDefault();
+            let data = {
+                'p_name': document.getElementById('id_p_name').value,
+                's_name': document.getElementById('id_s_name').value,
+                'address': document.getElementById('id_address').value,
+                'zip_numero': document.getElementById('id_zip_numero').value,
+                'city': document.getElementById('id_city').value,
+            }
+
+            let stripe = Stripe('{{ pub_key }}')
+
+            fetch('/cart/checkout/',(
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'x-CSRFT_TOKEN': '{{ csrf_token }}'
+                },
+
+                credentials: 'same-origin',
+                body: JSON.stringify(data)
+            ))
+
+            .then(function(response){
+                return response.json()
+            })
+
+            .then(function(session){
+                return stripe.redirectToCheckout({sessionId: session.id})
+            })
+
+            .then(function(result){
+                if(result.error){
+                    alert(result.error.message)
+                }                
+            })
+
+            .catch(function(error){
+                alert(error)
+            });
+
+            return ;
+        }
+    </script>
+{% endblock scripts %}
 

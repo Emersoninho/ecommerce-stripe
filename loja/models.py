@@ -84,7 +84,7 @@ class Order(models.Model):
     city = models.CharField(max_length=255)
     valor_pago = models.IntegerField(blank=True, null=True)
     esta_pago = models.BooleanField(default=False)
-    merc_id = models.CharField(max_length=255)
+    payment_intent= models.CharField(max_length=255)
     criado_por = models.ForeignKey(User, related_name='orders', on_delete=models.SET_NULL, null=True)
     created_at = models.DateTimeField(auto_now_add=True)    
 

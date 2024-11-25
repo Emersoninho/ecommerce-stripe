@@ -63,6 +63,9 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'core.urls'
 
+STRIPE_PUB_KEY = ''
+STRIPE_SECRET_KEY = ''
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
