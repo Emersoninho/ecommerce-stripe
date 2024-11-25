@@ -8,6 +8,7 @@ urlpatterns = [
     path('logout/', auth_views.LogoutView.as_view(), name='logout'),
     path('minhaconta/', views.minha_conta, name='minhaconta'),
     path('loja/', views.minha_loja, name='loja'),
+    path('loja/order-pedido/<int:pk>/', views.minha_loja_pedido_detalhes, name='minha_loja_pedido_detalhes'),
     path('loja/add-product/', views.add_product, name='add_product'),
     path('loja/edit-product/<int:pk>/', views.edit_product, name='edit_product'),
     path('loja/delete-product/<int:pk>/', views.delete_product, name='delete_product'),

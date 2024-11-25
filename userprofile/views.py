@@ -9,6 +9,7 @@ from loja.models import Product, Order, OrderItem
 from django.utils.text import slugify
 from loja.models import Product
 from django.contrib import messages
+from django.shortcuts import get_object_or_404
 
 def vendor_details(request, pk):
     user = User.objects.get(pk=pk)
@@ -22,6 +23,12 @@ def minha_loja(request):
     order_items = OrderItem.objects.filter(product__user=request.user)
     
     return render(request, 'userprofile/minhaloja.html', {'products': products, 'order_items': order_items})
+
+@login_required
+def minha_loja_pedido_detalhes(request, pk):
+    order = get_object_or_404(Order, pk=pk)
+    
+    return render(request, 'userprofile/minha_loja_pedido_detalhes.html', {'order': order})
 
 @login_required
 def add_product(request):
