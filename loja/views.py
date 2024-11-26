@@ -48,58 +48,67 @@ def checar_comprar(request):
     
     if request.method == 'POST':
         data = json.loads(request.body)
-        form = OrderForm(request.POST)
-        
-        total_price = 0
-        items = []
-        for item in carrinho:
-            product = item['product']
-            total_price += product.price * int(item['quantity'])
-            items.append({
-                'price_data':{
-                    'currency': 'usd',
-                    'product_data':{
-                        'nome': product.title,
+
+        p_name = data['p_name']
+        s_name = data['s_name']
+        address = data['address']
+        zip_numero = data['zip_numero']
+        city = data['city']
+
+        if p_name and s_name and address and zip_numero and city:
+
+            form = OrderForm(request.POST)
+            
+            total_price = 0
+            items = []
+            for item in carrinho:
+                product = item['product']
+                total_price += product.price * int(item['quantity'])
+                items.append({
+                    'price_data':{
+                        'currency': 'usd',
+                        'product_data':{
+                            'nome': product.title,
+                        },
+                        'unit_amount': product.price
                     },
-                    'unit_amount': product.price
-                },
-                    'quantity': item['quantity']
-            })
+                        'quantity': item['quantity']
+                })
 
-        stripe.api_key = settings.STRIPE_SECRET_KEY
-        session = stripe.checkout.Session.create(
-            payment_method_types = ['card'],
-            line_items = items,
-            mode = 'payment',
-            success_url = 'http://127.0.0.1:8000/cart/sucess',
-            cancel_url = 'http://127.0.0.1:8000/cart/'
-        )   
+            stripe.api_key = settings.STRIPE_SECRET_KEY
+            session = stripe.checkout.Session.create(
+                payment_method_types = ['card'],
+                line_items = items,
+                mode = 'payment',
+                success_url = 'http://127.0.0.1:8000/cart/sucess',
+                cancel_url = 'http://127.0.0.1:8000/cart/'
+            )   
 
-        payment_intent = session.payment_intent
+            payment_intent = session.payment_intent
 
-        order = Order.objects.create(
-            p_name = data['p_name'],
-            s_name = data['s_name'],
-            address = data['address'],
-            zip_numero = data['zip_numero'],
-            city = data['city'],
+            order = Order.objects.create(
+                p_name = p_name,
+                s_name = s_name,
+                address = address,
+                zip_numero = zip_numero,
+                city = city,
 
-            criado_por = request.user,
-            esta_pago = True,
-            payment_intent = payment_intent,
-            valor_pago = total_price
-        )
+                criado_por = request.user,
+                esta_pago = True,
+                payment_intent = payment_intent,
+                valor_pago = total_price
+            )
 
-        for item in carrinho:
-            product = item['product']
-            quantity = int(item['quantity'])
-            price = product.price * quantity
+            for item in carrinho:
+                product = item['product']
+                quantity = int(item['quantity'])
+                price = product.price * quantity
 
-            item = OrderItem.objects.create(order=order, product=product, price=price, quantity=quantity)
+                item = OrderItem.objects.create(order=order, product=product, price=price, quantity=quantity)
 
-        carrinho.clear()
+            carrinho.clear()
 
-        return JsonResponse({'session': session, 'order': payment_intent})
+            return JsonResponse({'session': session, 'order': payment_intent})
             
     else:
         form = OrderForm()
